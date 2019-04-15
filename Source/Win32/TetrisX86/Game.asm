@@ -89,8 +89,13 @@ TickHi				dd	?
 TickLo				dd	?
 PerfFreqHi			dd  ?
 PerfFreqLo			dd  ?
-pieces1				db	4,2,5,2,6,2,7,2,4,2,4,3,5,3,6,3,6,2,4,3,5,3,6,3,4,2,4,3
-pieces2				db  5,2,5,3,4,3,4,4,5,2,5,3,4,3,5,2,5,3,6,3,4,2,5,2,5,3,6,3
+
+;						I					R					L					O
+pieces1				db	4,2,5,2,6,2,7,2,	4,2,4,3,5,3,6,3,	6,2,4,3,5,3,6,3,	4,2,4,3
+
+;						O, cont'd			Z					T					S
+pieces2				db  5,2,5,3,4,			3,4,4,5,2,5,3,4,	3,5,2,5,3,6,3,		5,3,6,3,4,4,5,4
+
 active				db	8 dup (?)
 activeColorIndex	db  ?
 nextBlockIndex      db  ?
