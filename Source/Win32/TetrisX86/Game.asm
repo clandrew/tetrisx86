@@ -1,32 +1,32 @@
 .model flat,C
 option casemap:none
-ExitProcess				  proto stdcall :DWORD
-RegisterClassExA		  proto stdcall :DWORD
-CreateWindowExA			  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
-DefWindowProcA			  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
-ShowWindow				  proto stdcall :DWORD,:DWORD
-UpdateWindow			  proto stdcall :DWORD
-GetMessageA				  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
-TranslateMessage		  proto stdcall :DWORD
-DispatchMessageA		  proto stdcall :DWORD
-BeginPaint				  proto stdcall :DWORD,:DWORD
-EndPaint				  proto stdcall :DWORD,:DWORD
-FillRect				  proto stdcall :DWORD,:DWORD,:DWORD
-CreateSolidBrush		  proto stdcall :DWORD
-SetPixel				  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
+ExitProcess               proto stdcall :DWORD
+RegisterClassExA          proto stdcall :DWORD
+CreateWindowExA           proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
+DefWindowProcA            proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
+ShowWindow                proto stdcall :DWORD,:DWORD
+UpdateWindow              proto stdcall :DWORD
+GetMessageA               proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
+TranslateMessage          proto stdcall :DWORD
+DispatchMessageA          proto stdcall :DWORD
+BeginPaint                proto stdcall :DWORD,:DWORD
+EndPaint                  proto stdcall :DWORD,:DWORD
+FillRect                  proto stdcall :DWORD,:DWORD,:DWORD
+CreateSolidBrush          proto stdcall :DWORD
+SetPixel                  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
 QueryPerformanceCounter   proto stdcall :DWORD
 QueryPerformanceFrequency proto stdcall :DWORD
-SetTimer				  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
-InvalidateRect		      proto stdcall :DWORD,:DWORD,:DWORD
-CreateCompatibleDC		  proto stdcall :DWORD
+SetTimer                  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD
+InvalidateRect            proto stdcall :DWORD,:DWORD,:DWORD
+CreateCompatibleDC        proto stdcall :DWORD
 CreateCompatibleBitmap    proto stdcall :DWORD,:DWORD,:DWORD
 SelectObject              proto stdcall :DWORD,:DWORD
-BitBlt					  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
-StretchBlt			      proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
-DeleteObject			  proto stdcall :DWORD
-DeleteDC				  proto stdcall :DWORD
+BitBlt                    proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
+StretchBlt                proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD,:DWORD
+DeleteObject              proto stdcall :DWORD
+DeleteDC                  proto stdcall :DWORD
 GetClientRect             proto stdcall :DWORD,:DWORD
-DrawTextA				  proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD
+DrawTextA                 proto stdcall :DWORD,:DWORD,:DWORD,:DWORD,:DWORD
 .stack 64
 
 .data
@@ -70,43 +70,43 @@ LARGE_INTEGER UNION
 LARGE_INTEGER ENDS
 
 ; Strings
-MyWindowClassName	db "MyWindowClass", 0
-MyWindowName		db "TetrixX86", 0
-NextText			db "Next", 0
-GameOverText		db "Game Over", 0
+MyWindowClassName   db "MyWindowClass", 0
+MyWindowName        db "TetrixX86", 0
+NextText            db "Next", 0
+GameOverText        db "Game Over", 0
 
 ; Global variables
-Hwnd				dd ?
-PaintDC				dd ?
-IntermediateDC		dd ?
-BlackBrush			dd ?
-OrangeBrush			dd ?
-MagentaBrush		dd ?
-Grid				db	200 dup (?)
+Hwnd                dd ?
+PaintDC             dd ?
+IntermediateDC      dd ?
+BlackBrush          dd ?
+OrangeBrush         dd ?
+MagentaBrush        dd ?
+Grid                db 200 dup (?)
 GridRowStartIndices db  0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190
-GridColors			dd  0FF0000h, 0FFh, 0FF00FFh, 0FFFFh, 0FFFF00h, 80FFh, 8F8F8Fh, 0FF00h
-TickHi				dd	?
-TickLo				dd	?
-PerfFreqHi			dd  ?
-PerfFreqLo			dd  ?
+GridColors          dd  0FF0000h, 0FFh, 0FF00FFh, 0FFFFh, 0FFFF00h, 80FFh, 8F8F8Fh, 0FF00h
+TickHi              dd ?
+TickLo              dd ?
+PerfFreqHi          dd ?
+PerfFreqLo          dd ?
 
-;						I					R					L					O
-pieces1				db	4,2,5,2,6,2,7,2,	4,2,4,3,5,3,6,3,	6,2,4,3,5,3,6,3,	4,2,4,3
+;                       I                   R                   L                   O
+pieces1             db  4,2,5,2,6,2,7,2,    4,2,4,3,5,3,6,3,    6,2,4,3,5,3,6,3,    4,2,4,3
 
-;						O, cont'd			Z					T					S
-pieces2				db  5,2,5,3,4,			3,4,4,5,2,5,3,4,	3,5,2,5,3,6,3,		5,2,6,2,4,3,5,3
+;                       O, cont'd           Z                   T                   S
+pieces2             db  5,2,5,3,4,          3,4,4,5,2,5,3,4,    3,5,2,5,3,6,3,      5,2,6,2,4,3,5,3
 
-active				db	8 dup (?)
-activeColorIndex	db  ?
-nextBlockIndex      db  ?
-Pieces				db 56 dup (0dah)
-axisx				db	1
-axisy				db	1
-topext				dd	30
-leftext				dd	30
-predict				db	8 dup (?)
-gameover		    db	?
-running				db  1
+active              db 8 dup (?)
+activeColorIndex    db ?
+nextBlockIndex      db ?
+Pieces              db 56 dup (0dah)
+axisx               db 1
+axisy               db 1
+topext              dd 30
+leftext             dd 30
+predict             db 8 dup (?)
+gameover            db ?
+running             db  1
 
 .code
 
@@ -119,7 +119,7 @@ drawsquare proc
     push ebx
     mov colorRef, 0
     mov ebx, 0
-    mov bl, al	
+    mov bl, al
     shl ebx, 2
     mov eax, GridColors[ebx]
     mov colorRef, eax
@@ -138,13 +138,13 @@ drawsquare_doRow:
     push ebx
     push ecx
     push edx
-    invoke SetPixel,				IntermediateDC, currentX, currentY, colorRef
+    invoke SetPixel, IntermediateDC, currentX, currentY, colorRef
     inc currentX
-    invoke SetPixel,				IntermediateDC, currentX, currentY, colorRef
+    invoke SetPixel, IntermediateDC, currentX, currentY, colorRef
     inc currentX
-    invoke SetPixel,				IntermediateDC, currentX, currentY, colorRef
+    invoke SetPixel, IntermediateDC, currentX, currentY, colorRef
     inc currentX
-    invoke SetPixel,				IntermediateDC, currentX, currentY, colorRef
+    invoke SetPixel, IntermediateDC, currentX, currentY, colorRef
     inc currentX
     pop edx
     pop ecx
@@ -175,7 +175,7 @@ drawgrid_eachindex:
     mov ebx,200
     sub ebx,ecx
     mov al, Grid[bx]
-    pop ebx	
+    pop ebx
     push ebx ;stay 0-aligned
     push edx
     add ebx,leftext
@@ -221,7 +221,7 @@ drawactive_eachblock:
     add ebx,leftext
     shl dx,2
     add edx,topext
-    call drawsquare	
+    call drawsquare
     loop drawactive_eachblock
     
     pop dx
@@ -237,7 +237,7 @@ drawnext proc
     push bx
     push cx
     push dx
-    	
+
     mov al,nextBlockIndex
     inc al ; Store the color index here
 
@@ -260,10 +260,10 @@ drawnext_eachCoordinatePair:
     inc al
     add bl, 90
     add dl, 16
-    call drawsquare	
+    call drawsquare
     pop ebx
 loop drawnext_eachCoordinatePair
-    		
+
     pop dx
     pop cx
     pop bx
@@ -280,14 +280,14 @@ MyWindowProc proc
     local fillRectAddress : DWORD
     local bitmap, oldBitmap : DWORD
     local clientWidth, clientHeight : DWORD
-    mov eax,						[ebp + 8]
-    mov localHwnd,					eax
-    mov eax,						[ebp + 12]
-    mov message,					eax
-    mov eax,						[ebp + 16]
-    mov wParam,						eax
-    mov eax,						[ebp + 20]
-    mov lParam,						eax
+    mov eax, [ebp + 8]
+    mov localHwnd, eax
+    mov eax, [ebp + 12]
+    mov message, eax
+    mov eax, [ebp + 16]
+    mov wParam, eax
+    mov eax, [ebp + 20]
+    mov lParam, eax
 
     cmp message, 15
     je paintMessage
@@ -304,76 +304,76 @@ MyWindowProc proc
     jmp defaultWindowHandler
 
 paintMessage:
-    lea eax,						clientRect
-    invoke GetClientRect,			Hwnd, eax
-    mov eax,						clientRect.right
-    sub eax,						clientRect.left
-    mov clientWidth,				eax
-    mov eax,						clientRect.bottom
-    sub eax,						clientRect.top
-    mov clientHeight,				eax
+    lea eax,                        clientRect
+    invoke GetClientRect,           Hwnd, eax
+    mov eax,                        clientRect.right
+    sub eax,                        clientRect.left
+    mov clientWidth,                eax
+    mov eax,                        clientRect.bottom
+    sub eax,                        clientRect.top
+    mov clientHeight,               eax
 
-    lea eax,						paintStruct
-    mov paintStructAddress,			eax
-    invoke BeginPaint,				localHwnd, paintStructAddress
-    mov PaintDC,					eax
-    invoke CreateCompatibleDC,		PaintDC
-    mov IntermediateDC,				eax
-    invoke CreateCompatibleBitmap,	PaintDC, 200, 200
-    mov bitmap,						eax
-    invoke SelectObject,			IntermediateDC, bitmap
-    mov oldBitmap,					eax
+    lea eax,                        paintStruct
+    mov paintStructAddress,         eax
+    invoke BeginPaint,              localHwnd, paintStructAddress
+    mov PaintDC,                    eax
+    invoke CreateCompatibleDC,      PaintDC
+    mov IntermediateDC,             eax
+    invoke CreateCompatibleBitmap,  PaintDC, 200, 200
+    mov bitmap,                     eax
+    invoke SelectObject,            IntermediateDC, bitmap
+    mov oldBitmap,                  eax
     
-    lea eax,						fillRect
-    mov fillRectAddress,			eax
+    lea eax,                        fillRect
+    mov fillRectAddress,            eax
 
-    mov fillRect.left,				0
-    mov fillRect.top,				0
-    mov fillRect.right,				800
-    mov fillRect.bottom,			800
-    invoke FillRect,				IntermediateDC, fillRectAddress, BlackBrush
+    mov fillRect.left,              0
+    mov fillRect.top,               0
+    mov fillRect.right,             800
+    mov fillRect.bottom,            800
+    invoke FillRect,                IntermediateDC, fillRectAddress, BlackBrush
     
-    mov fillRect.left,				26
-    mov fillRect.top,				26
-    mov fillRect.right,				74
-    mov fillRect.bottom,			114
-    invoke FillRect,				IntermediateDC, fillRectAddress, OrangeBrush
+    mov fillRect.left,              26
+    mov fillRect.top,               26
+    mov fillRect.right,             74
+    mov fillRect.bottom,            114
+    invoke FillRect,                IntermediateDC, fillRectAddress, OrangeBrush
 
     call drawgrid
     call drawactive
     call drawnext
-    	
-    mov fillRect.left,				100
-    mov fillRect.top,				0
-    mov fillRect.right,				200
-    mov fillRect.bottom,			200
-    invoke DrawTextA,			    IntermediateDC, offset NextText, 4, fillRectAddress, 0
+    
+    mov fillRect.left, 100
+    mov fillRect.top, 0
+    mov fillRect.right, 200
+    mov fillRect.bottom, 200
+    invoke DrawTextA,     IntermediateDC, offset NextText, 4, fillRectAddress, 0
     
     cmp gameover, 1
     jne drawgameover_done
-    mov fillRect.left,				15
-    mov fillRect.top,				50
-    mov fillRect.right,				200
-    mov fillRect.bottom,			200
-    invoke DrawTextA,			    IntermediateDC, offset GameOverText, 9, fillRectAddress, 0
+    mov fillRect.left, 15
+    mov fillRect.top, 50
+    mov fillRect.right, 200
+    mov fillRect.bottom, 200
+    invoke DrawTextA, IntermediateDC, offset GameOverText, 9, fillRectAddress, 0
 drawgameover_done:
 
-    invoke StretchBlt,				PaintDC, 0, 0, clientWidth, clientHeight, IntermediateDC, 0, 0, 200, 200, 0CC0020h 
-    invoke SelectObject,			IntermediateDC, oldBitmap
-    invoke DeleteObject,			bitmap
-    invoke DeleteDC,				IntermediateDC
+    invoke StretchBlt, PaintDC, 0, 0, clientWidth, clientHeight, IntermediateDC, 0, 0, 200, 200, 0CC0020h 
+    invoke SelectObject, IntermediateDC, oldBitmap
+    invoke DeleteObject, bitmap
+    invoke DeleteDC, IntermediateDC
 
-    invoke EndPaint,				localHwnd, paintStructAddress
-    mov eax,						0
+    invoke EndPaint, localHwnd, paintStructAddress
+    mov eax, 0
     jmp MyWindowProc_done
      
 closeMessage:
-    mov running,					0
-    mov eax,						0
-    jmp MyWindowProc_done	
+    mov running, 0
+    mov eax, 0
+    jmp MyWindowProc_done
 
 eraseBackgroundMessage:
-    mov eax,						1
+    mov eax, 1
     jmp MyWindowProc_done
 
 keyupMessage:
@@ -402,40 +402,40 @@ keyupMessage:
 
     jmp defaultWindowHandler
 
-checkForEscape:	
+checkForEscape:
     cmp wParam, 27
     jne defaultWindowHandler ; 
     call InitializeGame
-    mov eax,						0
-    jmp MyWindowProc_done	
+    mov eax, 0
+    jmp MyWindowProc_done
 
 
 pressKeyLeft:
     call MoveLeft
     invoke InvalidateRect, Hwnd, 0, 0
-    mov eax,						0
-    jmp MyWindowProc_done	
+    mov eax, 0
+    jmp MyWindowProc_done
 
 pressKeyUp:
     call Rotate
     invoke InvalidateRect, Hwnd, 0, 0
-    mov eax,						0
+    mov eax, 0
     jmp MyWindowProc_done
 
 pressKeyRight:
     call MoveRight
     invoke InvalidateRect, Hwnd, 0, 0
-    mov eax,						0
-    jmp MyWindowProc_done	
+    mov eax, 0
+    jmp MyWindowProc_done
 
 pressKeyDown:
     call MoveDown
     invoke InvalidateRect, Hwnd, 0, 0
-    mov eax,						0
-    jmp MyWindowProc_done	
+    mov eax, 0
+    jmp MyWindowProc_done
     
 defaultWindowHandler:
-    invoke DefWindowProcA,			localHwnd, message, wParam, lParam
+    invoke DefWindowProcA, localHwnd, message, wParam, lParam
     ; Return the result up to the caller of this by preserving eax.
 MyWindowProc_done:
     ret
@@ -443,22 +443,22 @@ MyWindowProc endp
 
 RegisterMyWindow proc
     local windowclass: WNDCLASSEXA
-    mov windowclass.cbSize,			48		; 12 times 4, see declaration
-    mov windowclass.style,			3		; CS_HREDRAW | CS_VREDRAW
-    lea eax,						MyWindowProc
-    mov windowclass.lpfnWndProc,	eax
-    mov windowclass.cbClsExtra,		0
-    mov windowclass.cbWndExtra,		0
-    mov windowclass.hInstance,		5		; Picked arbitrarily.
-    mov windowclass.hIcon,			0
-    mov windowclass.hCursor,		0
-    mov windowclass.hbrBackground,	0
-    mov windowclass.lpszMenuName,	0
-    lea eax,						MyWindowClassName
-    mov windowclass.lpszClassName,	eax
-    mov windowclass.hIconSm,		0
-    lea eax,						windowclass
-    invoke RegisterClassExA,		eax		; Returns a WORD
+    mov windowclass.cbSize,         48 ; 12 times 4, see declaration
+    mov windowclass.style,          3 ; CS_HREDRAW | CS_VREDRAW
+    lea eax,                        MyWindowProc
+    mov windowclass.lpfnWndProc,    eax
+    mov windowclass.cbClsExtra,     0
+    mov windowclass.cbWndExtra,     0
+    mov windowclass.hInstance,      5 ; Picked arbitrarily.
+    mov windowclass.hIcon,          0
+    mov windowclass.hCursor,        0
+    mov windowclass.hbrBackground,  0
+    mov windowclass.lpszMenuName,   0
+    lea eax,                        MyWindowClassName
+    mov windowclass.lpszClassName,  eax
+    mov windowclass.hIconSm,        0
+    lea eax,                        windowclass
+    invoke RegisterClassExA,        eax ; Returns a WORD
     ret
 RegisterMyWindow endp
 
@@ -472,25 +472,25 @@ CreateMyWindow proc
     lea eax, MyWindowName
     mov windowName, eax
 
-    ;								extStyle	class		window			style		x(default)	y	width	height	parent	menu	instance	lpParam
-    invoke CreateWindowExA,			0,			className,	windowName,		0cf0000h,	080000000h, 0,	800,	800,	0,		0,		5,			0
+    ;                          extStyle    class         window         style        x(default)     y    width    height    parent    menu    instance    lpParam
+    invoke CreateWindowExA,    0,          className,    windowName,    0cf0000h,    080000000h,    0,   800,     800,      0,        0,      5,            0
     mov Hwnd, eax
 
-    invoke CreateSolidBrush,		0 ; Black
+    invoke CreateSolidBrush, 0 ; Black
     mov BlackBrush, eax
 
-    invoke CreateSolidBrush,		55AAh ;
+    invoke CreateSolidBrush, 55AAh ;
     mov OrangeBrush, eax
     
-    invoke CreateSolidBrush,		0ff00ffh ; Black
+    invoke CreateSolidBrush, 0ff00ffh ; Black
     mov MagentaBrush, eax
 
     ret
 CreateMyWindow endp
 
 ShowMyWindow proc
-    invoke ShowWindow,				Hwnd, 10 ; SW_SHOWDEFAULT
-    invoke UpdateWindow,			Hwnd
+    invoke ShowWindow, Hwnd, 10 ; SW_SHOWDEFAULT
+    invoke UpdateWindow, Hwnd
     ret
 ShowMyWindow endp
 
@@ -498,7 +498,7 @@ GetRandomBlockIndex proc ; Stores result in al
     local performanceCount : LARGE_INTEGER
 
     lea eax, performanceCount
-    invoke QueryPerformanceCounter,		eax
+    invoke QueryPerformanceCounter, eax
     mov ebx, performanceCount.LowPart
     mov ax, bx
     mov ah,0 
@@ -554,7 +554,7 @@ newblock_eachblock:
     pop dx
     pop cx
     pop bx
-    pop ax	
+    pop ax
     ret
 NewBlock endp
 
@@ -648,14 +648,14 @@ IsValidSpace proc ; x coordinate in cl, y coordinate in dl. Boolean result in ea
     cmp eax, 0 ; 0 means empty space
     jne invalidSpace
     mov eax, 1
-    ret	
+    ret
 invalidSpace:
     mov eax, 0
     ret
 IsValidSpace endp
 
 checkpredict proc ;zero in al if possible, nonzero otherwise
-    push ebx	
+    push ebx
     push ecx
     push edx
     
@@ -733,7 +733,7 @@ ClearRow_perCell:
     jmp ClearRow_perCell
 
 ClearRow_GoToNextColumn:
-    inc currentColumnIndex	
+    inc currentColumnIndex
     cmp currentColumnIndex, 10
     jne ClearRow_perColumn
     
@@ -845,7 +845,7 @@ rotatepredict proc ;set result in predict[]
     add bl,axisy
     add bh,axisx
     mov predict[2],bh
-    mov predict[3],bl	
+    mov predict[3],bl
     mov bl,active[4]
     mov bh,active[5]
     sub bl,axisx
@@ -1037,15 +1037,15 @@ WindowMessageLoop proc
     local message : DWORD
     local messageAddress : DWORD
 
-    lea eax,						message
-    mov messageAddress,				eax
+    lea eax, message
+    mov messageAddress, eax
 
 getMessage: ; loop
-    invoke GetMessageA,				messageAddress, 0, 0, 0
+    invoke GetMessageA, messageAddress, 0, 0, 0
     cmp eax, 0
     je quitMessage
-    invoke TranslateMessage,		messageAddress
-    invoke DispatchMessageA,		messageAddress
+    invoke TranslateMessage, messageAddress
+    invoke DispatchMessageA, messageAddress
     cmp running, 0
     jne getMessage
     
