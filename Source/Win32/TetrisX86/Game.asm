@@ -709,11 +709,13 @@ ClearRow_perCell:
 	; Source- above cell indexed by ebx
 	mov ebx, aboveRowIndex
 	mov bl, GridRowStartIndices[ebx]
+	mov bh, 0
 	add ebx, currentColumnIndex
 
 	; Dest- below cell, indexed by eax
 	mov eax, currentRowIndex
 	mov al, GridRowStartIndices[eax]
+	mov ah, 0
 	add eax, currentColumnIndex
 
 	mov bl, Grid[ebx]
@@ -727,7 +729,7 @@ ClearRow_perCell:
 
 ClearRow_GoToNextColumn:
 	inc currentColumnIndex	
-	cmp currentColumnIndex, 16
+	cmp currentColumnIndex, 10
 	jne ClearRow_perColumn
 	
 ClearRow_done:
@@ -753,11 +755,12 @@ checktoclear proc
 checkRow:
 	mov ebx, currentRowIndex
 	mov bl, GridRowStartIndices[ebx]
+	mov bh, 0
 	add ebx, currentColumnIndex
 	cmp Grid[ebx], 0
 	je foundAGap
 	inc currentColumnIndex
-	cmp currentColumnIndex, 10
+	cmp currentColumnIndex, 10 ; Did we get to the last column?
 	je clearThisRow
 	jmp checkRow
 
@@ -765,6 +768,11 @@ clearThisRow:
 	; Actual clearing of the row, then
 	mov eax, currentRowIndex
 	call ClearRow
+	; Don't decrement currentRowIndex, need to check it again
+	cmp currentRowIndex, 1
+	je checktoclear_done
+	mov currentColumnIndex, 0
+	jmp checkRow
 
 foundAGap:
 	; Don't clear this row
@@ -772,6 +780,7 @@ foundAGap:
 	cmp currentRowIndex, 1
 	je checktoclear_done
 	dec currentRowIndex
+	mov currentColumnIndex, 0
 	jmp checkRow
 
 checktoclear_done:
