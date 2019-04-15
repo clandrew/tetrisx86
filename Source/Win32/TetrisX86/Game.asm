@@ -74,6 +74,7 @@ MyWindowClassName   db "MyWindowClass", 0
 MyWindowName        db "TetrixX86", 0
 NextText            db "Next", 0
 GameOverText        db "Game Over", 0
+ScoreText           db "Score", 0
 
 ; Global variables
 Hwnd                dd ?
@@ -89,6 +90,9 @@ TickHi              dd ?
 TickLo              dd ?
 PerfFreqHi          dd ?
 PerfFreqLo          dd ?
+ScoreTextBuffer     db 8 dup (?)
+Score				dd ?
+LineScores			dd 0, 40, 100, 300, 1200
 
 ;                       I                   R                   L                   O
 pieces1             db  4,2,5,2,6,2,7,2,    4,2,4,3,5,3,6,3,    6,2,4,3,5,3,6,3,    4,2,4,3
@@ -271,6 +275,54 @@ loop drawnext_eachCoordinatePair
     ret
 drawnext endp
 
+; Fill ScoreTextBuffer with string data for a number. Returns the string length in eax.
+ScoreBuffer_Itoa proc
+push ecx
+push ebx
+push edx
+
+; Initialize the buffer to all 0s
+mov ScoreTextBuffer[0], 48
+mov ScoreTextBuffer[1], 48
+mov ScoreTextBuffer[2], 48
+mov ScoreTextBuffer[3], 48
+mov ScoreTextBuffer[4], 48
+mov ScoreTextBuffer[5], 48
+mov ScoreTextBuffer[6], 48
+mov ScoreTextBuffer[7], 0 ; null term
+
+mov eax, Score
+
+mov ecx, 8 ; Last pos in buffer
+dec ecx ; At null term
+dec ecx
+
+itoa_forEachDigit:
+
+mov edx, 0
+mov ebx, 10
+div ebx
+add edx, 48
+mov ScoreTextBuffer[ecx], dl
+cmp eax, 0
+je itoa_done
+
+cmp ecx, 0
+je itoa_done
+
+dec ecx
+jmp itoa_forEachDigit
+
+itoa_done:
+
+mov eax, 7
+
+pop edx
+pop ecx
+pop ebx
+ret
+ScoreBuffer_Itoa endp
+
 MyWindowProc proc 
     local localHwnd, message, wParam, lParam: DWORD
     local paintStruct : PAINTSTRUCT
@@ -347,7 +399,18 @@ paintMessage:
     mov fillRect.top, 0
     mov fillRect.right, 200
     mov fillRect.bottom, 200
-    invoke DrawTextA,     IntermediateDC, offset NextText, 4, fillRectAddress, 0
+    invoke DrawTextA,              IntermediateDC, offset NextText, 4, fillRectAddress, 0
+
+	
+    mov fillRect.top, 75
+    mov fillRect.bottom, 275
+    invoke DrawTextA,              IntermediateDC, offset ScoreText, 5, fillRectAddress, 0
+
+	call ScoreBuffer_Itoa
+	
+    mov fillRect.top, 100
+    mov fillRect.bottom, 300
+    invoke DrawTextA,              IntermediateDC, offset ScoreTextBuffer, eax, fillRectAddress, 0
     
     cmp gameover, 1
     jne drawgameover_done
@@ -575,6 +638,7 @@ InitializePieces endp
 
 InitializeGame proc
     mov gameover, 0
+	mov Score, 0
 
     call InitializePieces
 
@@ -744,7 +808,7 @@ ClearRow_done:
 ClearRow endp
 
 checktoclear proc
-    local currentRowIndex, currentColumnIndex : DWORD
+    local currentRowIndex, currentColumnIndex, rowsCleared : DWORD
     push eax
     push ebx
     push ecx
@@ -756,6 +820,7 @@ checktoclear proc
     mov currentRowIndex, 19 ; 20 - 1
 
     mov currentColumnIndex, 0
+	mov rowsCleared, 0
     
 checkRow:
     mov ebx, currentRowIndex
@@ -773,6 +838,9 @@ clearThisRow:
     ; Actual clearing of the row, then
     mov eax, currentRowIndex
     call ClearRow
+
+	inc rowsCleared
+
     ; Don't decrement currentRowIndex, need to check it again
     cmp currentRowIndex, 1
     je checktoclear_done
@@ -789,6 +857,21 @@ foundAGap:
     jmp checkRow
 
 checktoclear_done:
+
+cmp rowsCleared, 4
+jg checktoclear_sanitize
+jmp checktoclear_doneSanitize
+checktoclear_sanitize:
+mov rowsCleared, 4
+checktoclear_doneSanitize:
+
+mov eax, rowsCleared
+shl eax, 2
+mov eax, LineScores[eax]
+add Score, eax
+
+checktoclear_final:
+
     pop edx
     pop ecx
     pop ebx
@@ -923,6 +1006,8 @@ set_gameover:
     mov gameover, 1
     
 setblock_done:
+	inc Score
+
     pop edx
     pop ecx
     pop ebx
