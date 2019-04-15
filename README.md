@@ -25,3 +25,7 @@ The original resolution of the game is preserved at 320x200; the display is scal
 The keys i, j, k, and l or alternatively the arrow keys are used to move the pieces.
 
 This is built using a Visual Studio 2018 solution which invokes MASM.
+
+
+![Example image](https://raw.githubusercontent.com/clandrew/tetrisx86/master/Preview/Preview.gif "Example image")
+
