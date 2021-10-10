@@ -640,9 +640,6 @@ InitializeGame proc
     mov gameover, 0
 	mov Score, 0
 
-    BYTE 0Fh
-    BYTE 04h
-
     call InitializePieces
 
     mov cx,200
