@@ -22,6 +22,8 @@ The original resolution of the game is preserved at 320x200; the display is scal
 * Added a ‘next piece’ UI
 * When you get game over instead of crashing it displays a message and you can press Escape to start again
 
+Some details of the port are discussed in [this post](http://cml-a.com/content/2018/05/14/tetris-in-x68-resurrecting-old-source/).
+
 The keys i, j, k, and l or alternatively the arrow keys are used to move the pieces.
 
 This is built using a Visual Studio 2018 solution which invokes MASM.
