@@ -1,17 +1,17 @@
 # Tetris, in x86
 
-This is a game of Tetris written in x86 assembly. It was originally written as a means of learning more about the x86 instruction set.
+This is a game of Tetris written in x86. It was originally written as a means of learning more about the x86 instruction set.
 
 There are two versions.
 
 ## DOS Version
-The DOS version is a 16-bit COM executible. It uses mode 13h for all drawing, writing directly to address 0xA000 to plot. The index written for each pixel determines the color in a 256-indexed color palette.
+The DOS version is a 16-bit COM executible. It uses mode 13h for all drawing, writing directly to the mapped address to plot. The index written for each pixel determines the color in a 256-indexed color palette.
 
 Interrupts are used for other functionality like random number generation, and keyboard interaction. For random numbers, it uses the modulus of the current system time. The game keeps going until pieces reach the top of the screen.
 
 The keys i,j,k, and l are used to move the pieces.
 
-This is built using the A86 assembler.
+This is built using [A86](https://eji.com/a86/).
 
 ## Win32 Version
 This version is a 32-bit Win32 executible. It uses GDI to draw indexed-color-style shaded regions, and contains the usual things of interactive Win32 programs- creation of a window, a message handler, handling of paint events.
