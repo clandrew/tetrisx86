@@ -14,7 +14,7 @@ The keys i,j,k, and l are used to move the pieces.
 This is built using [A86](https://eji.com/a86/).
 
 ## Win32 Version
-This version is a 32-bit Win32 executible. It uses GDI to draw indexed-color-style shaded regions, and contains the usual things of interactive Win32 programs- creation of a window, a message handler, handling of paint events.
+This version is a 32-bit Win32 executable. It uses GDI to draw indexed-color-style shaded regions, and contains the usual things of interactive Win32 programs- creation of a window, a message handler, handling of paint events.
 
 The original resolution of the game is preserved at 320x200; the display is scaled up in this port for suitability on newer displays. The Windows version also includes
 * Different colors for the different pieces
