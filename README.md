@@ -20,7 +20,7 @@ The original resolution of the game is preserved at 320x200; the display is scal
 * Different colors for the different pieces
 * Fixed a bug where rows would sometimes not get cleared correctly
 * Added a ‘next piece’ UI
-* When you get game over instead of crashing it displays a message and you can press Escape to start again
+* When you get game over instead of terminating it displays a message and you can press Escape to start again
 
 Some details of the port are discussed in [this post](http://cml-a.com/content/2018/05/14/tetris-in-x68-resurrecting-old-source/).
 
